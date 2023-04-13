@@ -1,0 +1,27 @@
+<div class="row my-4">
+  <div class="col-md-12">
+    <h3>Add Post</h3>
+    <form [formGroup]="postForm" (ngSubmit)="onAddPost()">
+      <div class="md-3">
+        <label>Title</label>
+        <input type="text" class="form-control"  formControlName="title"/>
+
+<!--        <div *ngIf="postForm.get('title') && !postForm.get('title')">-->
+
+<!--          <div >Title is required</div>-->
+<!--          <div >минимальное значение 6 символов</div>-->
+
+<!--        </div>-->
+
+      </div>
+      <div class="md-3">
+        <label>Description</label>
+        <textarea class="form-control" formControlName="description"></textarea>
+      </div>
+
+      <div class="my-3">
+        <button type="submit" class="btn btn-primary">Add post</button>
+      </div>
+    </form>
+  </div>
+</div>
