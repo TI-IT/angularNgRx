@@ -1,5 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {Post} from "../../models/posts.model";
+import {Store} from "@ngrx/store";
+import {AppState} from "../../state/app.state";
+import {addPost} from "../state/post.action";
 
 @Component({
   selector: 'app-add-post',
@@ -9,7 +13,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 export class AddPostComponent implements OnInit {
   postForm: FormGroup;
 
-  constructor() {
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit(): void {
@@ -26,7 +30,15 @@ export class AddPostComponent implements OnInit {
   }
 
   onAddPost() {
-    // console.log(this.postForm.value, this.postForm.get)
-    console.log(this.postForm.get('title')?.value)
+    if(!this.postForm.valid){
+      return;
+    }
+
+    const post: Post = {
+      title: this.postForm.value.title,
+      description: this.postForm.value.description,
+    };
+
+    this.store.dispatch(addPost({post}))
   }
 }
