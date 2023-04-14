@@ -15,6 +15,8 @@ import { PostListComponent } from './posts/post-list/post-list.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import {appReducer} from "./state/app.state";
 import { AddPostComponent } from './posts/add-post/add-post.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatFormFieldModule} from "@angular/material/form-field";
 
 @NgModule({
   declarations: [
@@ -34,8 +36,8 @@ import { AddPostComponent } from './posts/add-post/add-post.component';
     ReactiveFormsModule,
     FormsModule,
 
-    StoreModule.forRoot( appReducer, {}),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    StoreModule.forRoot(appReducer, {}),
+    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !isDevMode()}),
 
     StoreDevtoolsModule.instrument({
       // maxAge: 25, // Retains last 25 states
@@ -44,6 +46,8 @@ import { AddPostComponent } from './posts/add-post/add-post.component';
       trace: false, //  If set to true, will include stack trace for every dispatched action, so you can see it in trace tab jumping directly to that part of code
       traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
     }),
+    BrowserAnimationsModule,
+    MatFormFieldModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

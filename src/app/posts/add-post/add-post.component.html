@@ -1,26 +1,40 @@
 <div class="row my-4">
   <div class="col-md-12">
     <h3>Add Post</h3>
-    <form [formGroup]="postForm" (ngSubmit)="onAddPost()">
+    <form [formGroup]="postForm" (input)="onAddPost()">
       <div class="md-3">
         <label>Title</label>
-        <input type="text" class="form-control"  formControlName="title"/>
+        <input type="text" class="form-control" formControlName="title"/>
+        <div *ngIf="postForm.get('title')?.touched && !postForm.get('title')?.valid">
+          <div *ngIf="postForm.hasError('required', 'title')">
+            это поле обязательное
+          </div>
+          <div *ngIf="postForm.hasError('minlength', 'title')">
+            меньше 6 символов
+          </div>
+        </div>
 
-<!--        <div *ngIf="postForm.get('title') && !postForm.get('title')">-->
+        <div class="md-3">
+          <label>Description</label>
+          <textarea class="form-control" formControlName="description"></textarea>
+          <div *ngIf="postForm.get('title')?.touched && !postForm.get('title')?.valid">
+            <div *ngIf="postForm.hasError('required', 'title')">
+              это поле обязательное
+            </div>
+            <div *ngIf="postForm.hasError('minlength', 'title')">
+              меньше 10 символов
+            </div>
+          </div>
+        </div>
 
-<!--          <div >Title is required</div>-->
-<!--          <div >минимальное значение 6 символов</div>-->
-
-<!--        </div>-->
-
-      </div>
-      <div class="md-3">
-        <label>Description</label>
-        <textarea class="form-control" formControlName="description"></textarea>
-      </div>
-
-      <div class="my-3">
-        <button type="submit" class="btn btn-primary">Add post</button>
+        <div class="my-3">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="postForm.invalid"
+          >Add post
+          </button>
+        </div>
       </div>
     </form>
   </div>

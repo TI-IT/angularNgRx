@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
@@ -6,11 +6,12 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
   templateUrl: './add-post.component.html',
   styleUrls: ['./add-post.component.scss']
 })
-export class AddPostComponent implements OnInit{
+export class AddPostComponent implements OnInit {
   postForm: FormGroup;
 
   constructor() {
   }
+
   ngOnInit(): void {
     this.postForm = new FormGroup({
       title: new FormControl(null, [
@@ -24,7 +25,8 @@ export class AddPostComponent implements OnInit{
     })
   }
 
-  onAddPost(){
-    console.log(this.postForm.value, this.postForm.get)
+  onAddPost() {
+    // console.log(this.postForm.value, this.postForm.get)
+    console.log(this.postForm.get('title')?.value)
   }
 }
