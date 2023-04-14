@@ -13,6 +13,7 @@
         <th>Id</th>
         <th>Title</th>
         <th>Description</th>
+        <th>Actions</th>
       </tr>
       </thead>
       <tbody>
@@ -20,6 +21,9 @@
         <td>{{post.id}}</td>
         <td>{{post.title}}</td>
         <td>{{post.description}}</td>
+        <td>
+          <a href="" class="btn btn-primary" [routerLink]="['edit', post.id]">Обновить</a>
+        </td>
       </tr>
       </tbody>
     </table>
