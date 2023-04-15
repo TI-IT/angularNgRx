@@ -4,20 +4,37 @@
       <h3>Update post</h3>
       <hr />
 
-      <form [formGroup]="postForm">
+      <form [formGroup]="postForm" (submit)="onUpdatePost()">
         <div class="md-3">
           <label>Title</label>
           <input type="text" class="form-control" formControlName="title"/>
+          <div *ngIf="postForm.get('title')?.touched && !postForm.get('title')?.valid">
+            <div *ngIf="postForm.hasError('required', 'title')">
+              это поле обязательное
+            </div>
+            <div *ngIf="postForm.hasError('minlength', 'title')">
+              меньше 6 символов
+            </div>
+          </div>
         </div>
         <div class="md-3">
           <label>Description</label>
           <textarea class="form-control"  formControlName="description"></textarea>
+          <div *ngIf="postForm.get('description')?.touched && !postForm.get('description')?.valid">
+            <div *ngIf="postForm.hasError('required', 'description')">
+              это поле обязательное
+            </div>
+            <div *ngIf="postForm.hasError('minlength', 'description')">
+              меньше 10 символов
+            </div>
+          </div>
         </div>
 
         <div class="my-3">
             <button
               type="submit"
               class="btn btn-primary"
+              [disabled]="postForm.invalid"
             >Update post
             </button>
           </div>
