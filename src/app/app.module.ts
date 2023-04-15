@@ -8,7 +8,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import {appReducer} from "./state/app.state";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatFormFieldModule} from "@angular/material/form-field";
 
@@ -24,10 +23,8 @@ import {MatFormFieldModule} from "@angular/material/form-field";
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-
-    StoreModule.forRoot(appReducer, {}),
+    StoreModule.forRoot({}, {}),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !isDevMode()}),
-
     StoreDevtoolsModule.instrument({
       // maxAge: 25, // Retains last 25 states
       logOnly: !isDevMode(), // Restrict extension to log-only mode

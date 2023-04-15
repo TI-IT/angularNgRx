@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <h2>Login</h2>
+    <hr/>
+    <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+
+      <div class="md-3">
+        <label>Email</label>
+        <input type="text" class="form-control" formControlName="email"/>
+        <div *ngIf="loginForm.get('email')?.touched && !loginForm.get('email')?.valid">
+          <div *ngIf="loginForm.hasError('required', 'email')">
+            это поле обязательное
+          </div>
+          <div *ngIf="loginForm.hasError('email', 'email')">
+            mail Не корректный
+          </div>
+        </div>
+      </div>
+
+      <div class="md-3">
+        <label>Password</label>
+        <input type="password" class="form-control" formControlName="password"/>
+        <div *ngIf="loginForm.get('email')?.touched && !loginForm.get('email')?.valid">
+          <div *ngIf="loginForm.hasError('required', 'email')">
+            это поле обязательное
+          </div>
+
+        </div>
+      </div>
+
+      <div class="md-3">
+        <button
+          type="submit"
+          class="btn btn-primary mt-2"
+          [disabled]="loginForm.invalid"
+        >Login</button>
+      </div>
+
+    </form>
+  </div>
+</div>
