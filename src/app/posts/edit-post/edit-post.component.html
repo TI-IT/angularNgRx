@@ -1,10 +1,9 @@
 <div class="row">
   <div class="col-md-12">
-    <form>
       <h3>Update post</h3>
       <hr />
 
-      <form [formGroup]="postForm" (submit)="onUpdatePost()">
+      <form [formGroup]="postForm" (ngSubmit)="onUpdatePost()">
         <div class="md-3">
           <label>Title</label>
           <input type="text" class="form-control" formControlName="title"/>
@@ -39,6 +38,5 @@
             </button>
           </div>
       </form>
-    </form>
   </div>
 </div>
