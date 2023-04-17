@@ -1,6 +1,6 @@
 import {createReducer, on} from "@ngrx/store";
 import {initialState} from "./shared.state";
-import {setLoadingSpiner} from "./shared.actions";
+import {setErrorMessage, setLoadingSpiner} from "./shared.actions";
 
 
 const _sharedReducer = createReducer(
@@ -10,8 +10,15 @@ const _sharedReducer = createReducer(
       ...state,
       showLoading: action.status,
     }
-  })
+  }),
+  on(setErrorMessage, (state, action) => {
+    return {
+      ...state,
+      errorMessage: action.message,
+    }
+  }),
 )
-export function SharedReducer(state: any, action: any){
+
+export function SharedReducer(state: any, action: any) {
   return _sharedReducer(state, action)
 }

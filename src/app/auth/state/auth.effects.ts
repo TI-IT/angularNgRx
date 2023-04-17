@@ -1,12 +1,12 @@
 import {Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {loginStart, loginSuccess} from "./auth.actions";
-import {exhaustMap, map} from "rxjs";
+import {catchError, exhaustMap, map, of} from "rxjs";
 import {AuthService} from "../../services/auth.service";
 import {User} from "../../models/user.model";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.state";
-import {setLoadingSpiner} from "../../store/shared/shared.actions";
+import {setErrorMessage, setLoadingSpiner} from "../../store/Shared/shared.actions";
 
 @Injectable()
 export class AuthEffects {
@@ -24,9 +24,21 @@ export class AuthEffects {
         return this.authService
           .login(action.email, action.password).pipe(
             map((data) => {
-              this.store.dispatch(setLoadingSpiner({status: false}))
-              const user: User = this.authService.formatUser(data)
+              this.store.dispatch(setLoadingSpiner({status: false}));
+              this.store.dispatch(setErrorMessage({message: ''}));
+              const user: User = this.authService.formatUser(data);
               return loginSuccess({user});
+
+            }),
+            //перехват ошибок
+            catchError((errResp) => {
+              //скрываем загрузку спинер
+              this.store.dispatch(setLoadingSpiner({status: false}));
+              console.log(errResp.error.error.message);
+              const errorMessage = this.authService.getErrorMessage(
+                errResp.error.error.message
+              );
+              return of(setErrorMessage({message: errorMessage}));
             })
           );
       })
