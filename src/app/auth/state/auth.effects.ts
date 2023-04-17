@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
-import {Actions, createEffect, ofType} from "@ngrx/effects";
-import {loginStart, loginSuccess} from "./auth.actions";
+import {act, Actions, createEffect, ofType} from "@ngrx/effects";
+import {loginStart, loginSuccess, signupStart, signupSuccess} from "./auth.actions";
 import {catchError, distinct, exhaustMap, map, of, tap} from "rxjs";
 import {AuthService} from "../../services/auth.service";
 import {User} from "../../models/user.model";
@@ -46,15 +46,42 @@ export class AuthEffects {
     );
   });
 
-  loginRedirect$ = createEffect(
+  redirect$ = createEffect(
     () => {
-    return this.actions$.pipe(
-      ofType(loginSuccess),
-      tap((action) => {
-        this.router.navigate(['/']);
-      })
-    );
-  },
+      return this.actions$.pipe(
+        ofType(...[loginSuccess, signupSuccess]),
+        tap((action) => {
+          this.store.dispatch(setErrorMessage({message: ''}));
+          this.router.navigate(['/']);
+        })
+      );
+    },
     {dispatch: false}
   );
+
+  signUp$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(signupStart),
+      exhaustMap((action) => {
+        return this.authService.signUp(action.email, action.password).pipe(
+          map((data) => {
+            this.store.dispatch(setLoadingSpiner({status: false}));
+            this.store.dispatch(setErrorMessage({message: ''}));
+            const user = this.authService.formatUser(data);
+            return signupSuccess({user})
+          }),
+          //перехват ошибок
+          catchError((errResp) => {
+            //скрываем загрузку спинер
+            this.store.dispatch(setLoadingSpiner({status: false}));
+            console.log(errResp.error.error.message);
+            const errorMessage = this.authService.getErrorMessage(
+              errResp.error.error.message
+            );
+            return of(setErrorMessage({message: errorMessage}));
+          })
+        );
+      })
+    )
+  });
 }
