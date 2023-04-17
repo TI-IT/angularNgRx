@@ -20,11 +20,10 @@
       <div class="md-3">
         <label>Password</label>
         <input type="password" class="form-control" formControlName="password"/>
-        <div *ngIf="loginForm.get('email')?.touched && !loginForm.get('email')?.valid">
-          <div *ngIf="loginForm.hasError('required', 'email')">
+        <div *ngIf="loginForm.get('password')?.touched && !loginForm.get('password')?.valid">
+          <div *ngIf="loginForm.hasError('required', 'password')">
             это поле обязательное
           </div>
-
         </div>
       </div>
 
