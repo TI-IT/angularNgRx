@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {act, Actions, createEffect, ofType} from "@ngrx/effects";
-import {loginStart, loginSuccess, signupStart, signupSuccess} from "./auth.actions";
-import {catchError, distinct, exhaustMap, map, of, tap} from "rxjs";
+import {autoLogin, loginStart, loginSuccess, signupStart, signupSuccess} from "./auth.actions";
+import {catchError, distinct, exhaustMap, map, mergeMap, of, tap} from "rxjs";
 import {AuthService} from "../../services/auth.service";
 import {User} from "../../models/user.model";
 import {Store} from "@ngrx/store";
@@ -29,6 +29,7 @@ export class AuthEffects {
               this.store.dispatch(setLoadingSpiner({status: false}));
               this.store.dispatch(setErrorMessage({message: ''}));
               const user: User = this.authService.formatUser(data);
+              this.authService.setUserInLocalStorage(user);
               return loginSuccess({user});
             }),
             //перехват ошибок
@@ -68,6 +69,7 @@ export class AuthEffects {
             this.store.dispatch(setLoadingSpiner({status: false}));
             this.store.dispatch(setErrorMessage({message: ''}));
             const user = this.authService.formatUser(data);
+            this.authService.setUserInLocalStorage(user);
             return signupSuccess({user})
           }),
           //перехват ошибок
@@ -84,4 +86,14 @@ export class AuthEffects {
       })
     )
   });
+
+  autoLogin$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(autoLogin),
+      map((action) => {
+        const user = this.authService.getUserFromLocalStorage();
+        console.log(user);
+      })
+    );
+  }, {dispatch: false});
 }
