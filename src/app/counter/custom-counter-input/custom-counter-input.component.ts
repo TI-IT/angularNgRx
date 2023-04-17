@@ -3,7 +3,7 @@ import {Store} from "@ngrx/store";
 import {customIncrement, onChangeChannelName} from "../state/counter.actions";
 import {getChannelName} from "../state/counter.selector";
 import {Observable} from "rxjs";
-import {AppState} from "../../state/app.state";
+import {AppState} from "../../store/app.state";
 
 @Component({
   selector: 'app-custom-counter-input',

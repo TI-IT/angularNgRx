@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Store} from "@ngrx/store";
 import {Observable, Subscription} from "rxjs";
 import {getCounter} from "../state/counter.selector";
-import {AppState} from "../../state/app.state";
+import {AppState} from "../../store/app.state";
 
 @Component({
   selector: 'app-counter-output',

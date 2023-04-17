@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from "@ngrx/store";
-import {AppState} from "../../state/app.state";
+import {AppState} from "../../store/app.state";
 import {Observable} from "rxjs";
 import {getPosts} from "../state/posts.selector";
 import {Post} from "../../models/posts.model";
