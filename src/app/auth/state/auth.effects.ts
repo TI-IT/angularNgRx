@@ -1,12 +1,12 @@
 import {Injectable} from "@angular/core";
-import {act, Actions, createEffect, ofType} from "@ngrx/effects";
+import { Actions, createEffect, ofType} from "@ngrx/effects";
 import {autoLogin, loginStart, loginSuccess, signupStart, signupSuccess} from "./auth.actions";
-import {catchError, distinct, exhaustMap, map, mergeMap, of, tap} from "rxjs";
+import {catchError, exhaustMap, map, of, tap} from "rxjs";
 import {AuthService} from "../../services/auth.service";
 import {User} from "../../models/user.model";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.state";
-import {setErrorMessage, setLoadingSpiner} from "../../store/Shared/shared.actions";
+import {setErrorMessage, setLoadingSpinner} from "../../store/Shared/shared.actions";
 import {Router} from "@angular/router";
 
 @Injectable()
@@ -26,7 +26,7 @@ export class AuthEffects {
         return this.authService
           .login(action.email, action.password).pipe(
             map((data) => {
-              this.store.dispatch(setLoadingSpiner({status: false}));
+              this.store.dispatch(setLoadingSpinner({status: false}));
               this.store.dispatch(setErrorMessage({message: ''}));
               const user: User = this.authService.formatUser(data);
               this.authService.setUserInLocalStorage(user);
@@ -35,7 +35,7 @@ export class AuthEffects {
             //перехват ошибок
             catchError((errResp) => {
               //скрываем загрузку спинер
-              this.store.dispatch(setLoadingSpiner({status: false}));
+              this.store.dispatch(setLoadingSpinner({status: false}));
               console.log(errResp.error.error.message);
               const errorMessage = this.authService.getErrorMessage(
                 errResp.error.error.message
@@ -66,7 +66,7 @@ export class AuthEffects {
       exhaustMap((action) => {
         return this.authService.signUp(action.email, action.password).pipe(
           map((data) => {
-            this.store.dispatch(setLoadingSpiner({status: false}));
+            this.store.dispatch(setLoadingSpinner({status: false}));
             this.store.dispatch(setErrorMessage({message: ''}));
             const user = this.authService.formatUser(data);
             this.authService.setUserInLocalStorage(user);
@@ -75,7 +75,7 @@ export class AuthEffects {
           //перехват ошибок
           catchError((errResp) => {
             //скрываем загрузку спинер
-            this.store.dispatch(setLoadingSpiner({status: false}));
+            this.store.dispatch(setLoadingSpinner({status: false}));
             console.log(errResp.error.error.message);
             const errorMessage = this.authService.getErrorMessage(
               errResp.error.error.message
@@ -92,8 +92,11 @@ export class AuthEffects {
       ofType(autoLogin),
       map((action) => {
         const user = this.authService.getUserFromLocalStorage();
-        console.log(user);
+        console.log(user)
+        // return of(loginSuccess({user}))
       })
     );
-  }, {dispatch: false});
+  },
+    {dispatch: false}
+  );
 }

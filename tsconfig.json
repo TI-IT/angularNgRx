@@ -23,7 +23,9 @@
       "ES2022",
       "dom"
     ],
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    //Проверяет на null || undefined
+    "strictNullChecks": true,
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

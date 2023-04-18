@@ -21,7 +21,7 @@ export class AppComponent implements OnInit{
   ngOnInit(): void {
     this.showLoading$ = this.store.select(getLoading);
     this.errorMessage$ = this.store.select(getErrorMessage);
-    this.store.dispatch(autoLogin());
+    this.store.dispatch( autoLogin());
   }
 
 }

@@ -10,6 +10,7 @@ import {User} from "../models/user.model";
 })
 export class AuthService {
   timeoutInterval: any;
+
   constructor(private http: HttpClient) {
   }
 
@@ -27,7 +28,7 @@ export class AuthService {
 
   formatUser(data: AuthResponseData) {
     const expirationDate = new Date(new Date().getTime() + +data.expiresIn * 1000);
-    const user = new User(data.email, data.idToken, data.localId, expirationDate);
+    const user:User = new User(data.email, data.idToken, data.localId, expirationDate);
 
     return user;
   }
@@ -45,25 +46,28 @@ export class AuthService {
     }
   }
 
-  setUserInLocalStorage(user: User){
+  setUserInLocalStorage(user: User) {
+    //Сохраняем User в локальное хранилище браузера
     localStorage.setItem('userData', JSON.stringify(user));
 
-    this.runTimeoutInterval(user)
+    this.runTimeoutInterval(user);
   };
 
-  runTimeoutInterval(user: User){
+  runTimeoutInterval(user: User) {
     const todaysDate = new Date().getTime();
     const expirationDate = user.expireDate.getTime();
     const timeInterval = expirationDate - todaysDate;
+    console.log('auth.service : timeInterval', timeInterval)
 
     this.timeoutInterval = setTimeout(() => {
+      // this.store.dispatch(autoLogout());
       //logout functionality or get the refresh token
     }, timeInterval);
   }
 
-  getUserFromLocalStorage(){
+  getUserFromLocalStorage() {
     const userDataString = localStorage.getItem('userData');
-    if(userDataString){
+    if (userDataString) {
       const userData = JSON.parse(userDataString);
       const expirationDate = new Date(userData.expirationDate);
       const user = new User(

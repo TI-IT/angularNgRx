@@ -11,17 +11,17 @@ export const AUTO_LOGIN_ACTION = '[auth page] auto login';
 
 export const loginStart = createAction(
   LOGIN_START,
-  props<{email:string, password: string}>()
+  props<{ email: string, password: string }>()
 );
 
 export const loginSuccess = createAction(
   LOGIN_SUCCESS,
-  props<{user: User}>()
+  props<{ user: User }>()
 );
 
 export const signupStart = createAction(
   SIGNUP_START,
-  props<{email: string; password: string}>()
+  props<{ email: string; password: string }>()
 );
 export const signupSuccess = createAction(
   SIGNUP_SUCCESS,
