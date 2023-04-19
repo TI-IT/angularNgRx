@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import { Actions, createEffect, ofType} from "@ngrx/effects";
 import {autoLogin, loginStart, loginSuccess, signupStart, signupSuccess} from "./auth.actions";
-import {catchError, exhaustMap, map, of, tap} from "rxjs";
+import {catchError, exhaustMap, map, mergeMap, of, tap} from 'rxjs'
 import {AuthService} from "../../services/auth.service";
 import {User} from "../../models/user.model";
 import {Store} from "@ngrx/store";
@@ -92,8 +92,13 @@ export class AuthEffects {
       ofType(autoLogin),
       map((action) => {
         const user = this.authService.getUserFromLocalStorage();
+        console.log("*************************************")
         console.log(user)
-        // return of(loginSuccess({user}))
+        if(user){
+          return of(loginSuccess({user}))
+        }
+        return null;
+
       })
     );
   },

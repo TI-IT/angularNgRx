@@ -57,7 +57,7 @@ export class AuthService {
     const todaysDate = new Date().getTime();
     const expirationDate = user.expireDate.getTime();
     const timeInterval = expirationDate - todaysDate;
-    console.log('auth.service : timeInterval', timeInterval)
+    // console.log('auth.service : timeInterval', timeInterval)
 
     this.timeoutInterval = setTimeout(() => {
       // this.store.dispatch(autoLogout());
