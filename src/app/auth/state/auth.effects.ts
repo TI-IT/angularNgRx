@@ -29,7 +29,9 @@ export class AuthEffects {
               this.store.dispatch(setLoadingSpinner({status: false}));
               this.store.dispatch(setErrorMessage({message: ''}));
               const user: User = this.authService.formatUser(data);
-              this.authService.setUserInLocalStorage(user);
+              if(user){
+                this.authService.setUserInLocalStorage(user);
+              }
               return loginSuccess({user});
             }),
             //перехват ошибок
@@ -90,18 +92,15 @@ export class AuthEffects {
   autoLogin$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(autoLogin),
-      map((action) => {
+      mergeMap((action) => {
         const user = this.authService.getUserFromLocalStorage();
         console.log("*************************************")
         console.log(user)
-        if(user){
-          return of(loginSuccess({user}))
-        }
-        return null;
-
+        // if(user){
+        //   return of(loginSuccess({user}))
+        // }
+        return of(loginSuccess({user}));
       })
     );
-  },
-    {dispatch: false}
-  );
+  });
 }

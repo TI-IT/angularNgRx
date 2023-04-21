@@ -46,7 +46,7 @@ export class AuthService {
     }
   }
 
-  setUserInLocalStorage(user: User) {
+  setUserInLocalStorage(user: User): void  {
     //Сохраняем User в локальное хранилище браузера
     localStorage.setItem('userData', JSON.stringify(user));
 

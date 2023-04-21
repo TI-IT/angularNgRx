@@ -16,7 +16,7 @@ export const loginStart = createAction(
 
 export const loginSuccess = createAction(
   LOGIN_SUCCESS,
-  props<{ user: User }>()
+  props<{ user: User | null }>()
 );
 
 export const signupStart = createAction(
