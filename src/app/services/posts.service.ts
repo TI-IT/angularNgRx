@@ -7,19 +7,27 @@ import {Post} from '../models/posts.model'
   providedIn: 'root',
 })
 export class PostsService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
-  getPosts(): Observable<Post[]>{
+  getPosts(): Observable<Post[]> {
     return this.http.get<Post[]>(
-      `https://tiit-36c09-default-rtdb.firebaseio.com/posts.json`
+      `https://tiit-36c09-default-rtdb.firebaseio.com/posts.json`,
     ).pipe(
-      map((data)=>{
-        const posts: Post[] = [];
-        for(let key in data){
-          posts.push({...data[key], id: +key});
+      map((data) => {
+        const posts: Post[] = []
+        for (let key in data) {
+          posts.push({...data[key], id: +key})
         }
-        return posts;
-      })
-    );
+        return posts
+      }),
+    )
+  }
+
+  addPost(post: Post) {
+    return this.http.post(
+      `https://tiit-36c09-default-rtdb.firebaseio.com/posts.json`,
+      post,
+    )
   }
 }
