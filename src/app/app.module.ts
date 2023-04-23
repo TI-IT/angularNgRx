@@ -11,10 +11,11 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {EffectsModule} from "@ngrx/effects";
-import { HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http'
 import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loading-spinner.component';
 import {appReducer} from "./store/app.state";
 import {AuthEffects} from "./auth/state/auth.effects";
+import {AuthTokenInterceptor} from './services/AuthToken.interceptor'
 
 @NgModule({
   declarations: [
@@ -42,7 +43,7 @@ import {AuthEffects} from "./auth/state/auth.effects";
     BrowserAnimationsModule,
     MatFormFieldModule,
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule {

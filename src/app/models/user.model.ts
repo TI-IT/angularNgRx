@@ -11,6 +11,7 @@ export class User {
   }
 
   get userToken() {
+
     return this.token;
   }
 }
