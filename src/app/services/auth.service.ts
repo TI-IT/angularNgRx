@@ -88,10 +88,9 @@ export class AuthService {
     return null;
   }
 
-  logout(){
-    //Удаляем пользователя с локального хранилища
+  logout() {
     localStorage.removeItem('userData');
-    if(this.timeoutInterval){
+    if (this.timeoutInterval) {
       clearTimeout(this.timeoutInterval);
       this.timeoutInterval = null;
     }

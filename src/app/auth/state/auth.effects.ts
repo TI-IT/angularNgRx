@@ -26,6 +26,7 @@ export class AuthEffects {
         return this.authService
           .login(action.email, action.password).pipe(
             map((data) => {
+
               this.store.dispatch(setLoadingSpinner({status: false}));
               this.store.dispatch(setErrorMessage({message: ''}));
               const user: User = this.authService.formatUser(data);
@@ -106,13 +107,16 @@ export class AuthEffects {
     );
   });
 
-  logout$ = createEffect(()=>{
-    return this.actions$.pipe(
-      ofType(autoLogout),
-      map((action)=>{
-        this.authService.logout();
-        this.router.navigate(['auth']);
-      })
-    )
-  }, {dispatch: false});
+  logout$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(autoLogout),
+        map((action) => {
+          this.authService.logout();
+          this.router.navigate(['auth']);
+        })
+      );
+    },
+    { dispatch: false }
+  );
 }
