@@ -1,28 +1,35 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import {HomeComponent} from "./home/home.component";
+import {NgModule} from '@angular/core'
+import {RouterModule, Routes} from '@angular/router'
+import {HomeComponent} from './home/home.component'
 import {AuthGuard} from './services/auth.guard'
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
-  {path: 'counter',
-  loadChildren: () =>
-    import('./counter/counter.module').then((m)=> m.CounterModule),
+  {
+    path: 'counter',
+    loadChildren: () =>
+      import('./counter/counter.module').then((m) => m.CounterModule),
+    //Доступ только авторизованным пользователям
+    canActivate: [AuthGuard],
 
   },
-  {path: 'posts',
+  {
+    path: 'posts',
     loadChildren: () =>
-      import('./posts/posts.module').then((m)=> m.PostsModule),
+      import('./posts/posts.module').then((m) => m.PostsModule),
+    //Доступ только авторизованным пользователям
     canActivate: [AuthGuard],
   },
-  {path: 'auth',
+  {
+    path: 'auth',
     loadChildren: () =>
       import('./auth/auth.module').then((m) => m.AuthModule),
-  }
-];
+  },
+]
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}
