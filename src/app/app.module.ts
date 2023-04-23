@@ -16,6 +16,7 @@ import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loa
 import {appReducer} from "./store/app.state";
 import {AuthEffects} from "./auth/state/auth.effects";
 import {AuthTokenInterceptor} from './services/AuthToken.interceptor'
+import {StoreRouterConnectingModule} from '@ngrx/router-store'
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import {AuthTokenInterceptor} from './services/AuthToken.interceptor'
       trace: false, //  If set to true, will include stack trace for every dispatched action, so you can see it in trace tab jumping directly to that part of code
       traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
     }),
+    StoreRouterConnectingModule.forRoot(),
     BrowserAnimationsModule,
     MatFormFieldModule,
   ],
