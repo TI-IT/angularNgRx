@@ -16,13 +16,12 @@ export class PostListComponent implements OnInit {
 
   constructor(private store: Store<AppState>) {
   }
-
   ngOnInit(): void {
     this.posts$ = this.store.select(getPosts);
     this.store.dispatch(loadPosts())
   }
 
-  onDeletePost(id: any) {
+  onDeletePost(id: string | any) {
     if (confirm("Вы уверены что хотите удалить?")) {
       this.store.dispatch(deletePost({id}));
     }

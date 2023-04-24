@@ -8,10 +8,12 @@ import {
   loadPosts,
   loadPostsSuccess,
   updatePost,
-  updatePostsSuccess,
+  updatePostSuccess,
 } from './post.action'
 import {filter, map, mergeMap, switchMap} from 'rxjs'
 import {ROUTER_NAVIGATION, RouterNavigatedAction} from '@ngrx/router-store'
+import {Update} from '@ngrx/entity'
+import {Post} from '../../models/posts.model'
 
 @Injectable()
 export class PostsEffects {
@@ -49,15 +51,31 @@ export class PostsEffects {
     return this.actions$.pipe(
       ofType(updatePost),
       switchMap((action) => {
-        return this.postsService
-          .updatePost(action.post)
-          .pipe(
-            map((data) => {
-              return updatePostsSuccess({post: action.post})
-            }))
-      }),
-    )
-  })
+        return this.postsService.updatePost(action.post).pipe(
+          map((data) => {
+            if(action.post.id){
+              const updatedPost: Update<Post> = {
+                id: action.post.id,
+                changes: {
+                  ...action.post,
+                },
+              };
+              return updatePostSuccess({ post: updatedPost });
+            }
+            const updatedPost: Update<Post> = {
+              id: '',
+              // id: 'posts.effects.ts',
+              changes: {
+                ...action.post,
+              },
+            };
+            return updatePostSuccess({ post: updatedPost });
+          })
+        );
+      })
+    );
+  });
+
   deletePost$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(deletePost),

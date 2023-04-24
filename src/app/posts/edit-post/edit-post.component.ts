@@ -25,17 +25,16 @@ export class EditPostComponent implements  OnInit, OnDestroy{
   ) {}
 
   ngOnInit(): void {
-    this.createForm()
-    this.postSubscription = this.store
-      .select(getPostById)
-      .subscribe((post) => {
-        if(post)
+    this.createForm();
+    this.store.select(getPostById).subscribe((post) => {
+      if (post) {
         this.post = post;
         this.postForm.patchValue({
           title: post.title,
           description: post.description,
-        })
-    })
+        });
+      }
+    });
   }
 
   createForm(){
@@ -52,7 +51,6 @@ export class EditPostComponent implements  OnInit, OnDestroy{
   }
 
   onUpdatePost(){
-    console.log(this.post.id, this.postForm.valid)
     if(!this.postForm.valid) {
       return;
     }
@@ -61,7 +59,6 @@ export class EditPostComponent implements  OnInit, OnDestroy{
 
       //dispatch action
       const post: Post = {
-
         id: this.post.id,
         title,
         description,
