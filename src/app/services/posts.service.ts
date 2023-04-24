@@ -46,4 +46,9 @@ export class PostsService {
       `https://tiit-36c09-default-rtdb.firebaseio.com/posts/${id}.json`
     );
   }
+  getPostById(id: string): Observable<Post>{
+    return this.http.get<Post>(
+      `https://tiit-36c09-default-rtdb.firebaseio.com/posts/${id}.json`
+    );
+  }
 }

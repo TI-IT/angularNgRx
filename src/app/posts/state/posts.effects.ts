@@ -10,7 +10,8 @@ import {
   updatePost,
   updatePostsSuccess,
 } from './post.action'
-import {map, mergeMap, switchMap} from 'rxjs'
+import {filter, map, mergeMap, switchMap} from 'rxjs'
+import {ROUTER_NAVIGATION, RouterNavigatedAction} from '@ngrx/router-store'
 
 @Injectable()
 export class PostsEffects {
@@ -44,17 +45,17 @@ export class PostsEffects {
     },
   )
 
-  updatePost$ = createEffect(()=>{
+  updatePost$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(updatePost),
-      switchMap((action)=>{
+      switchMap((action) => {
         return this.postsService
           .updatePost(action.post)
           .pipe(
             map((data) => {
-            return updatePostsSuccess({post: action.post})
-          }));
-      })
+              return updatePostsSuccess({post: action.post})
+            }))
+      }),
     )
   })
   deletePost$ = createEffect(() => {
@@ -67,6 +68,26 @@ export class PostsEffects {
             map((data) => {
               return deletePostSuccess({id: action.id})
             }))
+      }),
+    )
+  })
+
+  getSinglePost$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ROUTER_NAVIGATION),
+      filter((r: RouterNavigatedAction) => {
+        return r.payload.routerState.url.startsWith('/posts/details');
+      }),
+      map((r: any) => {
+        return r.payload.routerState['params']['id'];
+      }),
+      switchMap((id) => {
+        return this.postsService.getPostById(id).pipe(
+          map((post) => {
+            const postData = [{...post, id}]
+            return loadPostsSuccess({posts: postData})
+          }),
+        )
       }),
     )
   })
