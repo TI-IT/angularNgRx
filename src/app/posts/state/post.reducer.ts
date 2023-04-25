@@ -3,12 +3,14 @@ import {initialState, postsAdapter} from './post.state'
 import {addPostSuccess, deletePost, deletePostSuccess, loadPostsSuccess, updatePost} from './post.action'
 
 
-
 const _postsReducer = createReducer(
   initialState,
   on(addPostSuccess, (state, action) => {
-    return postsAdapter.addOne(action.post, state)
-
+    return postsAdapter.addOne(action.post, {
+        ...state,
+        count: state.count + 1,
+      }
+    )
   }),
   on(updatePost, (state, action) => {
     return postsAdapter.upsertOne(action.post, state)
@@ -17,7 +19,10 @@ const _postsReducer = createReducer(
     return postsAdapter.removeOne(id, state)
   }),
   on(loadPostsSuccess, (state, action) => {
-    return postsAdapter.setAll(action.posts, state)
+    return postsAdapter.setAll(action.posts, {
+      ...state,
+      count: state.count + 1,
+    })
   }),
 )
 

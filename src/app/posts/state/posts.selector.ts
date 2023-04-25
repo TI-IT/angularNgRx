@@ -22,5 +22,6 @@ export const getPostById = createSelector(
   }
 );
 
-// export const getCount = createSelector(
-//   getPostsState, (state) => state.count);
+//подсчет голосов
+export const getCount = createSelector(
+  getPostsState, (state) => state.count);
