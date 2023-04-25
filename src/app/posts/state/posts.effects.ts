@@ -10,26 +10,38 @@ import {
   updatePost,
   updatePostSuccess,
 } from './post.action'
-import {filter, map, mergeMap, switchMap} from 'rxjs'
+import {filter, map, mergeMap, of, switchMap, withLatestFrom} from 'rxjs'
 import {ROUTER_NAVIGATION, RouterNavigatedAction} from '@ngrx/router-store'
 import {Update} from '@ngrx/entity'
 import {Post} from '../../models/posts.model'
+import {Store} from '@ngrx/store'
+import {AppState} from '../../store/app.state'
+import {getPosts} from './posts.selector'
+import {dummyAction} from '../../auth/state/auth.actions'
 
 @Injectable()
 export class PostsEffects {
-  constructor(private actions$: Actions, private postsService: PostsService) {
+  constructor(
+    private actions$: Actions,
+    private postsService: PostsService,
+    private store: Store<AppState>,
+  ) {
   }
 
   loadPosts$ = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(loadPosts),
-        mergeMap((action) => {
-          return this.postsService.getPosts().pipe(
-            map((posts) => {
-              return loadPostsSuccess({posts})
-            }),
-          )
+        withLatestFrom(this.store.select(getPosts)),
+        mergeMap(([action, posts]) => {
+          if(!posts.length || posts.length === 1){
+            return this.postsService.getPosts().pipe(
+              map((posts) => {
+                return loadPostsSuccess({posts})
+              }),
+            )
+          }
+          return of(dummyAction());
         }),
       )
     })
@@ -53,14 +65,14 @@ export class PostsEffects {
       switchMap((action) => {
         return this.postsService.updatePost(action.post).pipe(
           map((data) => {
-            if(action.post.id){
+            if (action.post.id) {
               const updatedPost: Update<Post> = {
                 id: action.post.id,
                 changes: {
                   ...action.post,
                 },
-              };
-              return updatePostSuccess({ post: updatedPost });
+              }
+              return updatePostSuccess({post: updatedPost})
             }
             const updatedPost: Update<Post> = {
               id: '',
@@ -68,13 +80,13 @@ export class PostsEffects {
               changes: {
                 ...action.post,
               },
-            };
-            return updatePostSuccess({ post: updatedPost });
-          })
-        );
-      })
-    );
-  });
+            }
+            return updatePostSuccess({post: updatedPost})
+          }),
+        )
+      }),
+    )
+  })
 
   deletePost$ = createEffect(() => {
     return this.actions$.pipe(
@@ -94,18 +106,22 @@ export class PostsEffects {
     return this.actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigatedAction) => {
-        return r.payload.routerState.url.startsWith('/posts/details');
+        return r.payload.routerState.url.startsWith('/posts/details')
       }),
       map((r: any) => {
-        return r.payload.routerState['params']['id'];
+        return r.payload.routerState['params']['id']
       }),
-      switchMap((id) => {
-        return this.postsService.getPostById(id).pipe(
-          map((post) => {
-            const postData = [{...post, id}]
-            return loadPostsSuccess({posts: postData})
-          }),
-        )
+      withLatestFrom(this.store.select(getPosts)),
+      switchMap(([id, posts]) => {
+        if (!posts.length) {
+          return this.postsService.getPostById(id).pipe(
+            map((post) => {
+              const postData = [{...post, id}]
+              return loadPostsSuccess({posts: postData})
+            }),
+          )
+        }
+        return of(dummyAction())
       }),
     )
   })
